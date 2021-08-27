@@ -2,7 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_transitions/flutter_transitions.dart';
 import 'package:witpark/B_details.dart';
 
-class BookingCards extends StatelessWidget {
+var image = "assets/wit2.png";
+
+// ignore: must_be_immutable
+class BookingCards extends StatefulWidget {
+  String bowner;
+  String bcity;
+  String bplace;
+  String barrival;
+  String bdeparture;
+  String bvehicle;
+  String bamount;
+  String bstatus;
+  String bpaymentstatus;
+  BookingCards(
+      {this.bowner,
+      this.bcity,
+      this.bplace,
+      this.barrival,
+      this.bdeparture,
+      this.bvehicle,
+      this.bamount,
+      this.bstatus,
+      this.bpaymentstatus});
+
+  @override
+  _BookingCardsState createState() => _BookingCardsState(bowner, bcity, bplace,
+      barrival, bdeparture, bvehicle, bamount, bstatus, bpaymentstatus);
+}
+
+class _BookingCardsState extends State<BookingCards> {
+  String bowner;
+  String bcity;
+  String bplace;
+  String barrival;
+  String bdeparture;
+  String bvehicle;
+  String bamount;
+  String bstatus;
+  String bpaymentstatus;
+  _BookingCardsState(
+      this.bowner,
+      this.bcity,
+      this.bplace,
+      this.barrival,
+      this.bdeparture,
+      this.bvehicle,
+      this.bamount,
+      this.bstatus,
+      this.bpaymentstatus);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +70,18 @@ class BookingCards extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context, FlutterScaleRoute(page: BookingDetails()));
+                      context,
+                      FlutterScaleRoute(
+                          page: BookingDetails(
+                        bdowner: bowner,
+                        bdcity: bcity,
+                        bdplace: bplace,
+                        bdarrival: barrival,
+                        bddeparture: bdeparture,
+                        bdvehicle: bvehicle,
+                        bdamount: bamount,
+                        bdpaymentstatus: bpaymentstatus,
+                      )));
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.1,
@@ -37,13 +96,13 @@ class BookingCards extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 10),
                             child: CircleAvatar(
                               maxRadius: 30,
-                              backgroundImage: NetworkImage(
-                                  "https://pbs.twimg.com/profile_images/2853465978/a1f79511ee666f51a9eac8487bfd3220_400x400.png"),
+                              minRadius: 15,
+                              backgroundImage: AssetImage(image),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
-                            child: Text("tour to islamabad \n Rs. 3000"),
+                            child: Text("$bplace \nRs. $bamount"),
                           ),
                         ],
                       ),
@@ -51,22 +110,8 @@ class BookingCards extends StatelessWidget {
                         padding:
                             const EdgeInsets.only(right: 12, top: 3, bottom: 3),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("completed"),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.timer,
-                                  size: 10,
-                                ),
-                                Text(
-                                  "time ago",
-                                  style: TextStyle(fontSize: 10),
-                                )
-                              ],
-                            ),
-                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [status(bstatus)],
                         ),
                       ),
                     ],
@@ -82,4 +127,20 @@ class BookingCards extends StatelessWidget {
       ]),
     );
   }
+}
+
+Widget status(a) {
+  if (a == "active") {
+    return Text(
+      a,
+      style: TextStyle(color: Colors.green),
+    );
+  }
+  if (a == "clear") {
+    return Text(
+      a,
+      style: TextStyle(color: Colors.red),
+    );
+  }
+  return null;
 }

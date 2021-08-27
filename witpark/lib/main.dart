@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:witpark/ForgotPassword.dart';
-import 'LoginPage.dart';
+import 'package:witpark/HomePage.dart';
 
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    // home: ForgotPassword(),
-    home: LoginPage(),
+    home: HomePage(),
     theme: ThemeData(primarySwatch: Colors.amber),
   ));
 }

@@ -1,10 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 // ignore: must_be_immutable
-class Home extends StatelessWidget {
+class Skip extends StatelessWidget {
   var para1 = "online booking";
   var para2 = "Advance booking";
   var para3 = "Nearby Available parking";
@@ -15,13 +15,28 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: InkWell(
+          child: Icon(Icons.arrow_back_ios),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Colors.amber,
+        elevation: 0,
+        title: Text(
+          "Witpark",
+          style: TextStyle(fontSize: 40),
+        ),
+        centerTitle: true,
+      ),
       body: Container(
-        height: MediaQuery.of(context).size.height * 1,
+        height: MediaQuery.of(context).size.height * 0.9,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.19,
+                height: MediaQuery.of(context).size.height * 0.26,
                 decoration: BoxDecoration(
                     color: Colors.amber,
                     border: Border(
@@ -29,21 +44,20 @@ class Home extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.042,
-                    ),
-                    AutoSizeText(
-                      "  WitPark",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 40),
-                      maxLines: 1,
-                    ),
                     Container(
-                      alignment: Alignment.centerLeft,
-                      child: AutoSizeText(
-                        "  An intelligent parking and online booking system.\n  for your needs",
-                        style: GoogleFonts.aBeeZee(),
-                        maxLines: 2,
+                      child: Text(
+                        "Welcome to witpark",
+                        style: GoogleFonts.aBeeZee(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: AutoSizeText(
+                          "                   The project is likely to resolve most commonly faced issue for travelers and people living with-in city which is parking where ever we go we face a problem where to park our car and it remains safe. So, what if we had a way to book a parking spot before reaching there so you don’t have to look for the parking spots yourself and just go there and park your car to the reserved spot.",
+                          style: GoogleFonts.aBeeZee(),
+                        ),
                       ),
                     )
                   ],
@@ -120,7 +134,7 @@ class Home extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.amber,
                 ),
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.4,
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: ListView(
                   // physics: NeverScrollableScrollPhysics(),
@@ -154,6 +168,26 @@ class Home extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Text(
+                  "Sign in to explore more ",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.aBeeZee(fontSize: 30),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              ElevatedButton(
+                child: Text("Sign in"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.04,

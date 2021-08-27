@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_transitions/flutter_transitions.dart';
 import 'package:witpark/ResetPassword.dart';
+import 'package:witpark/edit_profile.dart';
 
 class VerificationCode extends StatelessWidget {
   @override
@@ -79,143 +79,33 @@ class VerificationCode extends StatelessWidget {
                               "Enter the verification code",
                               style: TextStyle(fontSize: 20),
                             )),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.12,
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: TextField(
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                        ),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(1),
-                                        ]),
+                        spacer(context, 0.03),
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.06,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: TextField(
+                                  maxLength: 5,
+                                  decoration: InputDecoration(
+                                    counterText: "",
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
                                   ),
                                 ),
                               ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.12,
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: TextField(
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                        ),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(1),
-                                        ]),
-                                  ),
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.12,
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: TextField(
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                        ),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(1),
-                                        ]),
-                                  ),
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.12,
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: TextField(
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                        ),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(1),
-                                        ]),
-                                  ),
-                                ),
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.06,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.12,
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: TextField(
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none,
-                                          errorBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                        ),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          LengthLimitingTextInputFormatter(1),
-                                        ]),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            Text("      -Enter the 5 digit code")
+                          ],
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.17,

@@ -1,6 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
-class FAQ extends StatelessWidget {
+class FAQ extends StatefulWidget {
+  @override
+  _FAQState createState() => _FAQState();
+}
+
+class _FAQState extends State<FAQ> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  Future<void> mail() async {
+    String username = 'info.witpark@gmail.com';
+    String password = 'fyppass123';
+    // ignore: deprecated_member_use
+    final smtpServer = gmail(username, password);
+    final message = Message()
+      ..from = Address(username, _authData["name"])
+      ..recipients.add("info.witpark@gmail.com")
+      ..subject = "Witpark FAQ app"
+      ..text = _authData["name"] + "\n" + _authData["message"]
+      ..html = "<h1> Name: " +
+          _authData["name"] +
+          "</h1><p> Message: " +
+          _authData["message"] +
+          "</p><p> Email: " +
+          _authData["email"] +
+          "</p>" +
+          "<p> Phone number: " +
+          _authData["phoneNo"] +
+          "</p>";
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+      showToast("Message sent", context: context);
+      Navigator.pop(context);
+    } on MailerException catch (e) {
+      print(e);
+      print('Message not sent.');
+      showToast("Message not sent try again or check your email",
+          context: context);
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
+    var connection = PersistentConnection(smtpServer);
+    await connection.close();
+  }
+
+  var _authData = {"name": "", "email": "", "phoneNo": "", "message": ""};
+
+  Future _submit() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    showToast("Please wait while your message is being sent",
+        context: context, duration: Duration.zero);
+    mail();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,70 +78,127 @@ class FAQ extends StatelessWidget {
             },
           ),
         ),
-        body: Container(
+        body: SingleChildScrollView(
+          child: Container(
+              child: Form(
+            key: _formKey,
             child: Column(children: [
-          Divider(
-            color: Colors.black,
-            thickness: 2,
-            indent: 120,
-            endIndent: 120,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30),
-            child: Container(
-              child: Column(
-                children: [
-                  TextField(
-                    maxLength: 20,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        labelText: "Name",
-                        hintText: "Enter your Name"),
-                  ),
-                  TextField(
-                    maxLength: 30,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        labelText: "Email",
-                        hintText: "Enter your Email"),
-                  ),
-                  TextField(
-                    maxLength: 11,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        labelText: "Phone Number",
-                        hintText: "Enter your Phone Number"),
-                  ),
-                  TextField(
-                    maxLength: 150,
-                    maxLines: 8,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        labelText: "Message",
-                        hintText: "Enter Message you want to send"),
-                  ),
-                ],
+              Divider(
+                color: Colors.black,
+                thickness: 2,
+                indent: 120,
+                endIndent: 120,
               ),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.02,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(
-              "Send",
-              style: TextStyle(color: Colors.black),
-            ),
-          )
-        ])));
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30),
+                child: Container(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.teal)),
+                            labelText: "Name",
+                            hintText: "Enter your Name"),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Name must be provided";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["name"] = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.teal)),
+                            labelText: "Email",
+                            hintText: "Enter your Email"),
+                        validator: (value) {
+                          if (value.isEmpty || !value.contains("@")) {
+                            return "Invalid email";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["email"] = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.teal)),
+                            labelText: "Phone Number",
+                            hintText: "Enter your Phone Number",
+                            counterText: ""),
+                        maxLength: 11,
+                        validator: (value) {
+                          if (value.isEmpty || value.length < 11) {
+                            return "Number is wrong, enter an 11 digit number";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["phoneNo"] = value;
+                        },
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                      ),
+                      TextFormField(
+                        maxLines: 8,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.teal)),
+                            labelText: "Message",
+                            hintText: "Enter Message you want to send"),
+                        validator: (value) {
+                          if (value.isEmpty || value.length < 15) {
+                            return "Message should be 15 characters long atleast";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["message"] = value;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.02,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator.pop(context);
+                  _submit();
+                },
+                child: Text(
+                  "Send",
+                  style: TextStyle(color: Colors.black),
+                ),
+              )
+            ]),
+          )),
+        ));
   }
 }

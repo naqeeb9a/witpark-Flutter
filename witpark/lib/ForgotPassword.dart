@@ -83,9 +83,10 @@ class ForgotPassword extends StatelessWidget {
                           child: TextField(
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              labelText: "Phone number",
-                              hintText: "number registered in this account",
-                            ),
+                                labelText: "Phone number",
+                                hintText: "number registered in this account",
+                                counterText: ''),
+                            maxLength: 11,
                           ),
                         ),
                         SizedBox(

@@ -1,7 +1,68 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:witpark/LoginPage.dart';
+import 'package:witpark/edit_profile.dart';
+import 'package:http/http.dart' as http;
 
-class AddVehicles extends StatelessWidget {
+// ignore: must_be_immutable
+class AddVehicles extends StatefulWidget {
+  var vvlenght;
+  AddVehicles(this.vvlenght);
+  @override
+  _AddVehiclesState createState() => _AddVehiclesState(vvlenght);
+}
+
+class _AddVehiclesState extends State<AddVehicles> {
+  var vvlenght;
+  _AddVehiclesState(this.vvlenght);
+  var name = "";
+
+  var year = "";
+
+  var brand = "";
+
+  var noPlate = "";
+
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  var _authData = {
+    "vehicle_owner": "",
+    "vehicle_name": "",
+    "vehicle_model": "",
+    "vehicle_color": "",
+    "vehicle_no_plate": ""
+  };
+  postData() async {
+    _authData["vehicle_owner"] = usernameLogin;
+    if (vvlenght.length < 3) {
+      var response = await http.post(
+          Uri.parse("http://witpark.pythonanywhere.com/API/Add_Vehicle_API/"),
+          body: _authData);
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 && vvlenght.length < 3) {
+        showToast("successfully added", context: context);
+        Navigator.pop(context);
+      } else {
+        //Simple to use, no global configuration
+        showToast("Error try again", context: context);
+      }
+    } else if (vvlenght.length >= 3) {
+      showToast("You can't add more than three vehicles", context: context);
+    } else {
+      //Simple to use, no global configuration
+      showToast("Error try again", context: context);
+    }
+  }
+
+  Future _submit() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    postData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,60 +93,94 @@ class AddVehicles extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Icon(
-                    Icons.camera,
-                    size: 60,
-                  )),
-            ),
             Padding(
               padding: const EdgeInsets.only(right: 30, left: 30),
               child: Container(
-                child: Column(
-                  children: [
-                    TextField(
-                      maxLength: 20,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          labelText: "Car Name", hintText: "Enter car name"),
-                    ),
-                    TextField(
-                      maxLength: 4,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          labelText: "Car Model",
-                          hintText: "Enter car's year model"),
-                    ),
-                    TextField(
-                      maxLength: 20,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          labelText: "Car Color",
-                          hintText: "Enter car's color"),
-                    ),
-                    TextField(
-                      maxLength: 20,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          labelText: "Number Plate",
-                          hintText: "Enter car's number plate's number"),
-                    )
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      spacer(context, 0.01),
+                      TextFormField(
+                        maxLength: 20,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            labelText: "car Name",
+                            hintText: "Enter car's name",
+                            counterText: ""),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter the name of the car";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["vehicle_name"] = value;
+                        },
+                      ),
+                      spacer(context, 0.01),
+                      TextFormField(
+                        maxLength: 4,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            labelText: "Car's model",
+                            hintText: "Enter car's year model",
+                            counterText: ""),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter a model of the car";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["vehicle_model"] = value;
+                        },
+                      ),
+                      spacer(context, 0.01),
+                      TextFormField(
+                        maxLength: 20,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            labelText: "Car color",
+                            hintText: "Enter car's color",
+                            counterText: ""),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter a color of the car";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["vehicle_color"] = value;
+                        },
+                      ),
+                      spacer(context, 0.01),
+                      TextFormField(
+                        maxLength: 20,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            labelText: "Number Plate",
+                            hintText: "Enter car's number plate's number",
+                            counterText: ""),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter the number plate of the car";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          _authData["vehicle_no_plate"] = value;
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
+            spacer(context, 0.08),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                _submit();
               },
               child: Text(
                 "Add",
